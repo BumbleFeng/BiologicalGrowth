@@ -18,17 +18,17 @@ public class BGRule {
         this.growingRatio = growingRatio;
 
     }
-    
-    public BGRule(int layer, int branch, double Angle, double Ratio){
+
+    public BGRule(int layer, int branch, double Angle, double Ratio) {
         this.layer = layer;
         this.branch = branch;
-        
+
         branchAngle = new double[branch];
         double d = (branch - 1) * Angle / 2;
         for (int i = 0; i < branch; i++) {
             branchAngle[i] = i * Angle - d;
         }
-        growingRatio = new double [branch];
+        growingRatio = new double[branch];
         for (int i = 0; i < branch; i++) {
             growingRatio[i] = Ratio;
         }

@@ -1,7 +1,5 @@
 package edu.neu.csye6200.bg;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.logging.Logger;
@@ -11,8 +9,8 @@ import javax.swing.JPanel;
  *
  * @author BumbleBee
  */
-public class BGPanel extends JPanel implements Runnable{
-    
+public class BGPanel extends JPanel implements Runnable {
+
     private Logger log = Logger.getLogger(BGPanel.class.getName());
     private BGRule[] bgr;
     private BGGenerationSet bggs;
@@ -20,40 +18,43 @@ public class BGPanel extends JPanel implements Runnable{
     private int max;
     private boolean suspended = false;
     private boolean stoped = false;
-    
+
     public BGPanel() {
     }
-    
+
     public void paint(Graphics g) {
-	super.paint(g);
+        super.paint(g);
         drawBG(g);
     }
-    
+
     public void drawBG(Graphics g) {
         //log.info("Drawing BG");
-	Graphics2D g2d = (Graphics2D) g;
-	//Dimension size = getSize(); 
+        Graphics2D g2d = (Graphics2D) g;
+        //Dimension size = getSize(); 
         //g2d.setColor(Color.WHITE);
-	//g2d.fillRect(0, 0, size.width, size.height);
-        
-        bggs = new BGGenerationSet(bgr); 
+        //g2d.fillRect(0, 0, size.width, size.height);
+
+        bggs = new BGGenerationSet(bgr);
         max = bggs.maxNum();
-        int precent =(int) (ctr / (max / 100.0));
+        int precent = (int) (ctr / (max / 100.0));
         g2d.drawString(precent + " %", 10, 15);
 
-                
-        g2d.translate(0,200);
-        
-        for(BGGeneration c : bggs.getBgg()){
+        g2d.translate(0, 200);
+
+        for (BGGeneration c : bggs.getBgg()) {
             int i = 0;
             g2d.translate(100, 0);
-            for(BGStem b : c.getBgs()){
-                for(Stem a : b.getLayerStems()) {
+            for (BGStem b : c.getBgs()) {
+                for (Stem a : b.getLayerStems()) {
                     g2d.drawLine(-a.getA().x, -a.getA().y, -a.getB().x, -a.getB().y);
                     i++;
-                    if(i == ctr) break;
+                    if (i == ctr) {
+                        break;
+                    }
                 }
-                if (i == ctr) break;
+                if (i == ctr) {
+                    break;
+                }
             }
         }
     }
@@ -61,17 +62,17 @@ public class BGPanel extends JPanel implements Runnable{
     public void setBgr(BGRule[] bgr) {
         this.bgr = bgr;
     }
-    
-    synchronized void stop(){
+
+    synchronized void stop() {
         stoped = true;
         notify();
     }
-    
-    synchronized void suspend(){
+
+    synchronized void suspend() {
         suspended = true;
     }
-    
-    synchronized void resume(){
+
+    synchronized void resume() {
         suspended = false;
         notify();
     }
@@ -83,30 +84,31 @@ public class BGPanel extends JPanel implements Runnable{
     public boolean isStoped() {
         return stoped;
     }
-    
-    public void newStart(){
+
+    public void newStart() {
         suspended = false;
         stoped = false;
     }
-    
-    
+
     @Override
     public void run() {
-        try{
+        try {
             for (ctr = 1; ctr <= max; ctr++) {
                 repaint();
                 Thread.sleep(50);
-                synchronized(this){
-                    while(suspended){
+                synchronized (this) {
+                    while (suspended) {
                         wait();
                     }
-                    if(stoped) break;
-                }    
+                    if (stoped) {
+                        break;
+                    }
+                }
             }
             this.stop();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
     }
-    
+
 }

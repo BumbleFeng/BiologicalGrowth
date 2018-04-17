@@ -7,13 +7,14 @@ import java.util.ArrayList;
  * @author BumbleBee
  */
 public class BGStem {
+
     private ArrayList<Stem> layerStems;
-    
-    public BGStem () {
+
+    public BGStem() {
         layerStems = new ArrayList<Stem>();
     }
-    
-    public BGStem Generation(BGRule bgr){
+
+    public BGStem Generation(BGRule bgr) {
         BGStem bgs = new BGStem();
         for (Stem ls : this.layerStems) {
             Stem[] bStems = bgr.Branch(ls);
