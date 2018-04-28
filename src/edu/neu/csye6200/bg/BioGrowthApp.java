@@ -124,7 +124,7 @@ public class BioGrowthApp extends BGApp {
         //Press “Stop” to pause. Than press “Start” to resume
         //While paused, press “Stop” to stop and press “Start” to start new
         if (ae.getActionCommand().equalsIgnoreCase("Start")) {
-
+            
             int layer = Integer.parseInt(layerTF.getText());
             int branch = Integer.parseInt(branchTF.getText());
             double angle = Double.parseDouble(angleTF.getText());
@@ -146,6 +146,7 @@ public class BioGrowthApp extends BGApp {
             }
 
             if (!bgPanel.isSuspended() | bgPanel.isStoped()) {
+                bgPanel.stop();
                 bgPanel.newStart();
                 bgPanel.setBgr(bgr);
                 t = new Thread(bgPanel);
